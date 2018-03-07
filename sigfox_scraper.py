@@ -22,25 +22,22 @@ class SigfoxScraper(object):
         else:
             self._password = None
 
-    def request_list_of_devices(self):
+    def request_list_of_device_type_ids(self):
         url = DEVICE_TYPES_URL
         response = requests.get(url, auth=(self._login, self._password))
-        device_types = response.text
-        device_types = json.loads(device_types)
-        device_types = device_types[DATA_KEY]
-        device_type_ids = []
-        for device in device_types:
-            device_type_ids.append(device[ID_KEY])
+        device_type_ids = response.text
+        device_type_ids = json.loads(device_type_ids)
 
         return device_type_ids
+
+    def request_list_of_devices(self):
+        pass
 
     def request_device_messages(self, device_id):
         url = DEVICE_MESSAGES_URL % (device_id)
         response = requests.get(url, auth=(self._login, self._password))
-        self.print_response(response)
         messages = response.text
         messages = json.loads(messages)
-        messages = messages[DATA_KEY]
         return messages
     
     def submit_authorisation_details(self, username, password):
