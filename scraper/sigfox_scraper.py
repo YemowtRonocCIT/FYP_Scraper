@@ -36,17 +36,17 @@ class SigfoxScraper(object):
         else:
             self._password = None
 
-    def request_list_of_device_type_ids(self): 
+    def request_device_types(self): 
         """
         Returns in dict format, the device type IDs from the sigfox network
         for the registered user. 
         """
         url = DEVICE_TYPES_URL
         response = requests.get(url, auth=(self._login, self._password))
-        device_type_ids = response.text
-        device_type_ids = json.loads(device_type_ids)
+        device_types = response.text
+        device_types = json.loads(device_types)
 
-        return device_type_ids
+        return device_types
 
     def request_devices(self, device_type_id):
         """
