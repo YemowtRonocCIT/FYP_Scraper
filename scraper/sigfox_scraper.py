@@ -70,10 +70,7 @@ class SigfoxScraper(object):
         payload (dict): Optional parameters to add to the request
         """
         url = DEVICE_MESSAGES_URL % (device_id)
-        if payload is None:
-            response = requests.get(url, auth=(self._login, self._password))
-        else:
-            response = requests.get(url, auth=(self._login, self._password),
+        response = requests.get(url, auth=(self._login, self._password),
                                 params=payload)
         messages = response.text
         messages = json.loads(messages)
