@@ -8,8 +8,9 @@ import requests
 import json
 
 DEVICE_TYPES_URL = "https://backend.sigfox.com/api/devicetypes/"
+DEVICES_OF_TYPE_URL = "https://backend.sigfox.com/api/devicetypes/%s/devices"
 DEVICE_INFO_URL = "https://backend.sigfox.com/api/devices/%s/"
-DEVICE_MESSAGES_URL = "https://backend.sigfox.com/api/devices/%s/messages"
+DEVICE_MESSAGES_URL = "https://backend.sigfox.com/api/devices/%s/messages/"
 
 DATA_KEY = 'data'
 ID_KEY = 'id'
@@ -47,8 +48,18 @@ class SigfoxScraper(object):
 
         return device_type_ids
 
-    def request_devices(self):
-        pass
+    def request_devices(self, device_type_id):
+        """
+        Returns in dict format, the devices for a given device type id. 
+
+        device_type_id: str
+        """
+        url = DEVICES_OF_TYPE_URL % device_type_id
+        response = requests.get(url, auth=(self._login, self._password))
+        devices = response.text
+        devices = json.loads(devices)
+
+        return devices
 
     def request_device_messages(self, device_id):
         """
