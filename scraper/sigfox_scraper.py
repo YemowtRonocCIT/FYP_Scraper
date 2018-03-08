@@ -61,15 +61,20 @@ class SigfoxScraper(object):
 
         return devices
 
-    def request_device_messages(self, device_id):
+    def request_device_messages(self, device_id, payload=None):
         """
         Returns in dict format, the response from the sigfox network when 
         requesting messages for a given device ID.
 
-        device_id: str
+        device_id (str): Device ID as registered to Sigfox
+        payload (dict): Optional parameters to add to the request
         """
         url = DEVICE_MESSAGES_URL % (device_id)
-        response = requests.get(url, auth=(self._login, self._password))
+        if payload is None:
+            response = requests.get(url, auth=(self._login, self._password))
+        else:
+            response = requests.get(url, auth=(self._login, self._password),
+                                params=payload)
         messages = response.text
         messages = json.loads(messages)
         return messages
