@@ -23,8 +23,8 @@ class SigfoxScraper(object):
         Initializes an instance of SigfoxScraper. If login details are given,
         they will be stored for use in the requests later. 
 
-        username: str
-        password: str
+        username (str): [OPTIONAL] Login identifier to access the Sigfox API
+        password (str): [OPTIONAL] Login password to access the Sigfox API
         """
         if username:
             self._login = username
@@ -52,7 +52,7 @@ class SigfoxScraper(object):
         """
         Returns in dict format, the devices for a given device type id. 
 
-        device_type_id: str
+        device_type_id (str): Device type ID as registered to Sigfox
         """
         url = DEVICES_OF_TYPE_URL % device_type_id
         response = requests.get(url, auth=(self._login, self._password))
@@ -67,7 +67,7 @@ class SigfoxScraper(object):
         requesting messages for a given device ID.
 
         device_id (str): Device ID as registered to Sigfox
-        payload (dict): Optional parameters to add to the request
+        payload (dict): [OPTIONAL] Parameters to add to the request
         """
         url = DEVICE_MESSAGES_URL % (device_id)
         response = requests.get(url, auth=(self._login, self._password),
@@ -80,8 +80,8 @@ class SigfoxScraper(object):
         """
         Stores login details of the user in the class. 
 
-        username: str
-        password: str
+        username (str): The login identifier for the Sigfox API
+        password (str): The password for the Sigfox API
         """
         self._login = username
         self._password = password
@@ -91,7 +91,8 @@ class SigfoxScraper(object):
         """
         Prints reponse details from requests module, for a given response.
 
-        response: requests.models.Response
+        response (requests.models.Response): Standard response from the 
+        requests module.
         """
         print("Status Code: %d" % (response.status_code))
         print("Response Content Type: %s" % (response.headers['content-type']))
