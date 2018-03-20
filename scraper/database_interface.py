@@ -48,6 +48,7 @@ class DatabaseInterface(object):
         """
         try:
             self._cursor.execute(sql, data)
+            return True
         except psycopg2.IntegrityError:
             # Should run in case of repeated UNIQUE table values
             traceback.print_exc()
@@ -55,3 +56,5 @@ class DatabaseInterface(object):
         except:
             traceback.print_exc()
             self._conn.rollback()
+        
+        return False
