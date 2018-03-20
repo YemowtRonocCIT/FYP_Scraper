@@ -85,7 +85,6 @@ class SigfoxScraper(object):
         """
         self._login = username
         self._password = password
-        pass
 
     def print_response(self, response):
         """
