@@ -26,8 +26,10 @@ class PostgresInteraction(PostgresInterface):
         False if the node is disabled.
         """
         sql = """INSERT INTO node (node_id, sigfox_id, active)
-        VALUES (default, %s, %s)"""
-        data = (sigfox_id, is_active)
+        VALUES (default, %s, %s)
+        ON CONFLICT (sigfox_id) DO UPDATE
+        SET active = %s"""
+        data = (sigfox_id, is_active, is_active)
         if self.execute(sql, data):
             return True
         else:
@@ -113,8 +115,11 @@ class PostgresInteraction(PostgresInterface):
         vibration_sensed (bool): True if vibration sensor working
         """
         sql = """INSERT INTO sensor (node_id, temperature_sensed, vibration_sensed)
-        VALUES (%s, %s, %s)"""
-        data = (node_id, temperature_sensed, vibration_sensed)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (node_id) DO UPDATE
+        SET temperature_sensed = %s,
+            vibration_sensed = %s"""
+        data = (node_id, temperature_sensed, vibration_sensed, temperature_sensed, vibration_sensed)
 
         if self.execute(sql, data):
             return True
