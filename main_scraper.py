@@ -43,7 +43,7 @@ def main():
     for value in devices.values():
         # value can be a list of devices
         for device in value:
-            if db.add_node(device, True):
+            if db.add_node(device, False):
                 logging.debug("Node inserted: %s" % device)
             else:
                 logging.error("Node could not be inserted: %s" % device)
