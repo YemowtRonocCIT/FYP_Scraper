@@ -1,11 +1,11 @@
-from scraper.database_interface import DatabaseInterface
+from scraper.postgres_interface import PostgresInterface
 
-class PostgresInteraction(DatabaseInterface):
+class PostgresInteraction(PostgresInterface):
 
     def __init__(self, db_name, db_user, db_password, host):
         """
         Constructor for PostgresInteraction class. It requires the details to
-        connect to the database, and will use the DatabaseInterface() class
+        connect to the database, and will use the PostgresInterface() class
         to simplify interactions.
 
         db_name (str): The name of the database that will be used

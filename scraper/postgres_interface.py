@@ -3,11 +3,11 @@ import traceback
 
 CONNECTION = "dbname=%s user=%s host=%s password=%s"
 
-class DatabaseInterface(object):
+class PostgresInterface(object):
 
     def __init__(self, db_name, db_user, db_password, host):
         """
-        Initializes the DatabaseInterface class. The class requires a database 
+        Initializes the PostgresInterface class. The class requires a database 
         name, user and password to connect to the database. The host allows for
         extensibility and allow remote connections to servers. The class was 
         written to interact with PostgreSQL using psycopg2.
