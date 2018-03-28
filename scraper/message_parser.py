@@ -1,3 +1,4 @@
+
 class MessageParser(object):
 
     def retrieve_button_pressed(self, char):
@@ -11,12 +12,14 @@ class MessageParser(object):
         BUTTON_PRESSED = 'B'
         BUTTON_NOT_PRESSED = 'N'
 
-        value = -1
+        value = False
 
         if char == BUTTON_PRESSED:
             value = True
         elif char == BUTTON_NOT_PRESSED:
             value = False
+        else:
+            value = -1
         
         return value
 
@@ -103,17 +106,16 @@ class MessageParser(object):
         button_char = message[BUTTON_CHAR_INDEX]
         temperature_char = message[TEMPERATURE_CHAR_INDEX]
         vibration_char = message[VIBRATION_CHAR_INDEX]
-
+        
+        button_pressed = self.retrieve_button_pressed(button_char)
         temperature_sensed = self.check_temp_sensed(temperature_char)
         vibration_sensed = self.check_vibration_sensed(vibration_char)
 
         db.add_sensor_update(node_id, temperature_sensed, vibration_sensed)
-        
-        button_pressed = self.retrieve_button_pressed(button_char)
 
         if temperature_sensed:
             temperature_number = self.convert_temperature(temperature_char)
-        
+            
         if vibration_sensed:
             vibration_value = self.convert_vibration(vibration_char)
 
