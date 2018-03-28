@@ -56,8 +56,8 @@ class PostgresInteraction(PostgresInterface):
         sigfox_id (str): Given Sigfox ID for the node
         """
         sql = """DELETE FROM node
-        WHERE sigfox_id = %s"""
-        data = (sigfox_id)
+        WHERE sigfox_id = %s;"""
+        data = (sigfox_id, )
         if self.execute(sql, data):
             return True
         else:
@@ -80,8 +80,8 @@ class PostgresInteraction(PostgresInterface):
         """
         sql = """SELECT node_id, sigfox_id AS s_id, active
         FROM node
-        WHERE s_id = %s"""
-        data = (sigfox_id)
+        WHERE sigfox_id = %s"""
+        data = (sigfox_id, )
         rows = self.select(sql, data)
         return rows
 
