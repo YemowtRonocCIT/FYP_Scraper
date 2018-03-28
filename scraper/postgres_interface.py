@@ -1,7 +1,8 @@
 import psycopg2
-import traceback
+import logging
 
 CONNECTION = "dbname=%s user=%s host=%s password=%s"
+CLASS_NAME = "scraper.PostgresInterface: "
 
 class PostgresInterface(object):
 
@@ -23,7 +24,9 @@ class PostgresInterface(object):
                                                                 db_password))
             self._conn.autocommit = True
         except:
-            traceback.print_exc()
+            logging.exception("%s db_name=%s, db_user=%s, host=%s" % 
+                                                                (CLASS_NAME, db_name, db_user, host))
+            raise
 
         self._cursor = self._conn.cursor()
 
@@ -51,10 +54,12 @@ class PostgresInterface(object):
             return True
         except psycopg2.IntegrityError:
             # Should run in case of repeated UNIQUE table values
-            traceback.print_exc()
             self._conn.rollback()
+            logging.exception('%s execute() sql=%s , data=%s' % (CLASS_NAME, sql, data))
+            raise
         except:
-            traceback.print_exc()
             self._conn.rollback()
+            logging.exception('%s execute() sql=%s , data=%s' % (CLASS_NAME, sql, data))
+            raise
         
         return False

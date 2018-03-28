@@ -108,15 +108,20 @@ class MessageParser(object):
         vibration_char = message[VIBRATION_CHAR_INDEX]
         
         button_pressed = self.retrieve_button_pressed(button_char)
-        temperature_sensed = self.check_temp_sensed(temperature_char)
-        vibration_sensed = self.check_vibration_sensed(vibration_char)
+        if button_pressed != -1:
 
-        db.add_sensor_update(node_id, temperature_sensed, vibration_sensed)
+            temperature_sensed = self.check_temp_sensed(temperature_char)
+            vibration_sensed = self.check_vibration_sensed(vibration_char)
 
-        if temperature_sensed:
-            temperature_number = self.convert_temperature(temperature_char)
+            db.add_sensor_update(node_id, temperature_sensed, vibration_sensed)
+
+            if temperature_sensed:
+                temperature_number = self.convert_temperature(temperature_char)
             
-        if vibration_sensed:
-            vibration_value = self.convert_vibration(vibration_char)
+            if vibration_sensed:
+                vibration_value = self.convert_vibration(vibration_char)
 
-        db.add_message(node_id, button_pressed, temperature_number, vibration_value)
+            db.add_message(node_id, button_pressed, temperature_number, vibration_value)
+
+        else:
+            print("Invalid message: %s" % (message))
