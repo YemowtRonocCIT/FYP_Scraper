@@ -1,3 +1,4 @@
+import logging
 
 class MessageParser(object):
 
@@ -124,4 +125,4 @@ class MessageParser(object):
             db.add_message(node_id, button_pressed, temperature_number, vibration_value)
 
         else:
-            print("Invalid message: %s" % (message))
+            logging.debug("Invalid message: %s" % (message))
