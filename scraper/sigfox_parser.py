@@ -70,4 +70,5 @@ class SigfoxParser(object):
             return decoded
         except ValueError:
             traceback.print_exc()
+            print("Supposed Message: %s" % (hex_encoded_message))
             return hex_encoded_message
