@@ -30,7 +30,7 @@ class MessageParser(object):
 
         message (str): Character from message
         """
-        TEMPERATURE_NOT_DETECTED = 'N'
+        TEMPERATURE_NOT_DETECTED = 'Z'
 
         value = False
 
@@ -45,7 +45,7 @@ class MessageParser(object):
 
         char (str): Character from message
         """
-        VIBRATION_NOT_SENSED = 'N'
+        VIBRATION_NOT_SENSED = 'Z'
 
         value = False
 
@@ -61,13 +61,42 @@ class MessageParser(object):
 
         char (str): Character from message
         """
-        
-        FORTY_DEGREES = 'A'
+        ZERO_CHAR = 'A'
+        ONE_CHAR = 'B'
+        TWO_CHAR = 'C'
+        THREE_CHAR = 'D'
+        FOUR_CHAR = 'E'
+        FIVE_CHAR = 'F'
+        TEN_CHAR = 'G'
+        FIFTEEN_CHAR = 'H'
+        TWENTY_CHAR = 'I'
+        TWENTY_FIVE_CHAR = 'J'
+        THIRTY_CHAR = 'K'
+        THIRTY_FIVE_CHAR = 'L'
+        FORTY_CHAR = 'M'
+        GREATER_FORTY_CHAR = 'N'
+
+        map_values = {
+            ZERO_CHAR: 0,
+            ONE_CHAR: 1,
+            TWO_CHAR: 2,
+            THREE_CHAR: 3,
+            FOUR_CHAR: 4,
+            FIVE_CHAR: 5,
+            TEN_CHAR: 10,
+            FIFTEEN_CHAR: 15,
+            TWENTY_CHAR: 20,
+            TWENTY_FIVE_CHAR: 25,
+            THIRTY_CHAR: 30,
+            THIRTY_FIVE_CHAR: 35,
+            FORTY_CHAR: 40,
+            GREATER_FORTY_CHAR: 50
+        }
 
         value = -127
 
-        if char == FORTY_DEGREES:
-            value = 40
+        if char.upper() in map_values:
+            value = map_values[char]
     
         if char.islower():
             value = value * -1
@@ -80,13 +109,38 @@ class MessageParser(object):
 
         char (str): Character from message
         """
+        ZERO_READING = 'Z'
+        TEN_READING = 'B'
+        TWENTY_READING = 'C'
+        THIRTY_READING = 'D'
+        FORTY_READING = 'E'
+        FIFTY_READING = 'F'
+        SIXTY_READING = 'G'
+        SEVENTY_READING = 'H'
+        EIGHTY_READING = 'I'
+        NINETY_READING = 'J'
+        HUNDRED_READING = 'K'
+        OFF_SCALE_READING = 'L'
 
-        HIGH_VIBRATION = 'V'
+        map_values = {
+            ZERO_READING: 0.00,
+            TEN_READING: 0.10,
+            TWENTY_READING: 0.20,
+            THIRTY_READING: 0.30,
+            FORTY_READING: 0.40,
+            FIFTY_READING: 0.50,
+            SIXTY_READING: 0.60,
+            SEVENTY_READING: 0.70,
+            EIGHTY_READING: 0.80,
+            NINETY_READING: 0.90,
+            HUNDRED_READING: 1.00,
+            OFF_SCALE_READING: 2.00
+        }
 
-        value = -127.000
+        value = 0.000
 
-        if char == HIGH_VIBRATION:
-            value = 0.999
+        if char in map_values:
+            value = map_values[char]
         
         return value
 
