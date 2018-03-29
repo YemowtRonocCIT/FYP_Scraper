@@ -97,8 +97,8 @@ class PostgresInteraction(PostgresInterface):
         temperature (character): Encoded character value to be converted
         vibration (character): Encoded character value to be converted
         """
-        sql = """INSERT INTO messages(message_id, node_id, button_pressed, temperature, vibration) 
-        VALUES (default, %s, %s, %s, %s)"""
+        sql = """INSERT INTO messages(message_id, node_id, button_pressed, temperature, vibration, time_added) 
+        VALUES (default, %s, %s, %s, %s, current_timestamp)"""
         data = (node_id, button_pressed, temperature, vibration)
         if self.execute(sql, data):
             return True
