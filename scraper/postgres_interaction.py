@@ -80,7 +80,7 @@ class PostgresInteraction(PostgresInterface):
 
         sigfox_id (str): Given sigfox ID
         """
-        sql = """SELECT node_id, sigfox_id AS s_id, active
+        sql = """SELECT node_id, sigfox_id, active
         FROM node
         WHERE sigfox_id = %s"""
         data = (sigfox_id, )
