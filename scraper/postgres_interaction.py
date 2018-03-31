@@ -101,9 +101,17 @@ class PostgresInteraction(PostgresInterface):
         sql = """INSERT INTO last_message(node_id, button_press, 
             temp_sensed, vib_sensed, temperature, vibration, 
             time_entered) 
-        VALUES (%s, %s, %s, %s, %s, %s, current_timestamp)"""
+        VALUES (%s, %s, %s, %s, %s, %s, current_timestamp)
+        ON CONFLICT (node_id) DO UPDATE
+        SET button_press = %s,
+            temp_sensed = %s,
+            vib_sensed = %s,
+            temperature = %s,
+            vibration = %s,
+            time_entered = current_timestamp;"""
         data = (node_id, button_pressed, temperature_sensed, vibration_sensed,
-                                                     temperature, vibration)
+                        temperature, vibration, button_pressed, temperature_sensed,
+                        vibration_sensed, temperature, vibration)
         if self.execute(sql, data):
             return True
         else:
