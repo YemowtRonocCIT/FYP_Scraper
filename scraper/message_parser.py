@@ -144,6 +144,37 @@ class MessageParser(object):
         
         return value
 
+    def calculate_temperature_value(self, char, temperature_sensed):
+        """
+        Calculates the value to be added to the database for the temperature.
+
+        char (str): Single character encoded by the Arduino
+        """
+        temperature = None
+        if temperature_sensed == True:
+            temperature = self.convert_temperature(char)
+
+        if temperature == None:
+            temperature = -127
+        
+        return temperature
+
+    def calculate_vibration_value(self, char, vibration_sensed):
+        """
+        Calculates the value to be added to the database for the vibration.
+
+        char (str): Single character encoded by the Arduino
+        """
+        vibration_value = None      
+        if vibration_sensed == True:
+            vibration_value = self.convert_vibration(char)
+
+        if vibration_value == None:
+            vibration_value = 0.00
+
+        return vibration_value
+
+
     def insert_message_to_database(self, message, db, node_id):
         """
         Inserts relevant data for a message into the database, with given
@@ -169,20 +200,12 @@ class MessageParser(object):
             if button_pressed != -1:
 
                 temperature_sensed = self.check_temp_sensed(temperature_char)
+                temperature_number = self.calculate_temperature_value(
+                                            temperature_char, temperature_sensed)  
+
                 vibration_sensed = self.check_vibration_sensed(vibration_char)
-
-                temperature_number = None
-                if temperature_sensed:
-                    temperature_number = self.convert_temperature(temperature_char)
-
-                vibration_value = None                
-                if vibration_sensed:
-                    vibration_value = self.convert_vibration(vibration_char)
-
-                if temperature_number == None:
-                    temperature_number = -127
-                if vibration_value == None:
-                    vibration_value = 0.00
+                vibration_value = self.calculate_temperature_value(
+                                            vibration_char, vibration_sensed)
                 
                 db.add_message(node_id, button_pressed, temperature_sensed, 
                     vibration_sensed, temperature_number, vibration_value)
