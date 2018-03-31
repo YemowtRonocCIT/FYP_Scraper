@@ -87,7 +87,8 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql, data)
         return rows
 
-    def add_message(self, node_id, button_pressed, temperature, vibration):
+    def add_message(self, node_id, button_pressed, temperature_sensed, 
+                                vibration_sensed, temperature, vibration):
         """
         Adds message details to database. The details of each sensor are 
         decoded before being inserted into the database.
@@ -97,9 +98,12 @@ class PostgresInteraction(PostgresInterface):
         temperature (character): Encoded character value to be converted
         vibration (character): Encoded character value to be converted
         """
-        sql = """INSERT INTO messages(message_id, node_id, button_pressed, temperature, vibration, time_added) 
-        VALUES (default, %s, %s, %s, %s, current_timestamp)"""
-        data = (node_id, button_pressed, temperature, vibration)
+        sql = """INSERT INTO last_message(node_id, button_press, 
+            temp_sensed, vib_sensed, temperature, vibration, 
+            time_entered) 
+        VALUES (%s, %s, %s, %s, %s, %s, current_timestamp)"""
+        data = (node_id, button_pressed, temperature_sensed, vibration_sensed,
+                                                     temperature, vibration)
         if self.execute(sql, data):
             return True
         else:
