@@ -157,26 +157,35 @@ class MessageParser(object):
         BUTTON_CHAR_INDEX = 0
         TEMPERATURE_CHAR_INDEX = 1
         VIBRATION_CHAR_INDEX = 2
+        APPROPRIATE_MESSAGE_LENGTH = 3
 
-        button_char = message[BUTTON_CHAR_INDEX]
-        temperature_char = message[TEMPERATURE_CHAR_INDEX]
-        vibration_char = message[VIBRATION_CHAR_INDEX]
-        
-        button_pressed = self.retrieve_button_pressed(button_char)
-        if button_pressed != -1:
+        if len(message) == APPROPRIATE_MESSAGE_LENGTH:
 
-            temperature_sensed = self.check_temp_sensed(temperature_char)
-            vibration_sensed = self.check_vibration_sensed(vibration_char)
-
-            db.add_sensor_update(node_id, temperature_sensed, vibration_sensed)
-
-            if temperature_sensed:
-                temperature_number = self.convert_temperature(temperature_char)
+            button_char = message[BUTTON_CHAR_INDEX]
+            temperature_char = message[TEMPERATURE_CHAR_INDEX]
+            vibration_char = message[VIBRATION_CHAR_INDEX]
             
-            if vibration_sensed:
-                vibration_value = self.convert_vibration(vibration_char)
+            button_pressed = self.retrieve_button_pressed(button_char)
+            if button_pressed != -1:
 
-            db.add_message(node_id, button_pressed, temperature_number, vibration_value)
+                temperature_sensed = self.check_temp_sensed(temperature_char)
+                vibration_sensed = self.check_vibration_sensed(vibration_char)
+
+                temperature_number = None
+                if temperature_sensed:
+                    temperature_number = self.convert_temperature(temperature_char)
+
+                vibration_value = None                
+                if vibration_sensed:
+                    vibration_value = self.convert_vibration(vibration_char)
+
+                if temperature_number == None:
+                    temperature_number = -127
+                if vibration_value == None:
+                    vibration_value = 0.00
+                
+                db.add_message(node_id, button_pressed, temperature_sensed, 
+                    vibration_sensed, temperature_number, vibration_value)
 
         else:
             logging.debug("Invalid message: %s" % (message))
