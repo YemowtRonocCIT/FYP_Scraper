@@ -87,7 +87,7 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql, data)
         return rows
 
-    def add_message(self, node_id, button_pressed, temperature_sensed, 
+    def add_latest_message(self, node_id, button_pressed, temperature_sensed, 
                                 vibration_sensed, temperature, vibration):
         """
         Adds message details to database. The details of each sensor are 
