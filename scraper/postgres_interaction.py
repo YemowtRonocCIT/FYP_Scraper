@@ -87,6 +87,23 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql, data)
         return rows
 
+    def add_message(self, node_id, message, time_sent):
+        """
+        Inserts given values to database in the message table. This
+        will maintain historic messages for various auditorial checks
+
+        node_id (int): ID value for node to identify from the database
+        message (str): Decoded message sent to sigfox
+        time_sent (long): Seconds since unix epoch, to be converted on INSERT
+        """
+        sql = """INSERT INTO message(node_id, message_text, time_sent, time_entered)
+        VALUES (%s, %s, to_timestamp(%s), current_timestamp)"""
+        data = (node_id, message, time_sent)
+        if self.execute(sql, data):
+            return True
+        else:
+            return False
+
     def add_latest_message(self, node_id, button_pressed, temperature_sensed, 
                                 vibration_sensed, temperature, vibration):
         """

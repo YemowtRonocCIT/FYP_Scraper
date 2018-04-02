@@ -57,8 +57,12 @@ def main():
             for row in rows:
                 node_id = row[NODE_ID_INDEX]
 
+            MESSAGE_INDEX = 0
+            TIME_INDEX = 1
             for encoded_message in encoded_messages:
-                message = sigfox_parser.convert_message_from_hex(encoded_message)
+                message = sigfox_parser.convert_message_from_hex(encoded_message[MESSAGE_INDEX])
+                seconds_since_unix_epoch = encoded_message[TIME_INDEX]
+                db.add_message(node_id, message, seconds_since_unix_epoch)
                 message_parser.insert_message_to_database(message, db, node_id)
 
 if __name__ == '__main__':

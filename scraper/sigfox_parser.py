@@ -1,6 +1,7 @@
 import traceback
 
 DATA_KEY = 'data'
+TIME_KEY = 'time'
 ID_KEY = 'id'
 
 class SigfoxParser(object):
@@ -54,7 +55,8 @@ class SigfoxParser(object):
         list_of_messages = []
 
         for message in messages:
-            list_of_messages.append(message[DATA_KEY])
+            message_tuple = (message[DATA_KEY], message[TIME_KEY])
+            list_of_messages.append(message_tuple)
         
         return list_of_messages
 
