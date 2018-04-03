@@ -3,7 +3,7 @@ from scraper.postgres_interface import PostgresInterface
 from scraper.postgres_interaction import PostgresInteraction
 from scraper.sigfox_parser import SigfoxParser
 from scraper.message_parser import MessageParser
-from login_details import USER, PASSWORD
+from login_details import FIRST_USER, FIRST_PASSWORD, SECOND_USER, SECOND_PASSWORD
 from login_details import DB_NAME, DB_USER, DB_PASSWORD, HOST
 
 import logging
@@ -13,16 +13,15 @@ ID_KEY = 'id'
 NODE_ID_INDEX = 0
 LOGGING_FILE = 'scraper.log'
 
-def main():
+def scrape_messages(user, password):
     """
-    Entry point for the scraper. 
-    """
-    
-    # Config the logging output file
-    logging.basicConfig(filename=LOGGING_FILE, level=logging.DEBUG)
+    With given API user and password access keys, this function will 
+    continuously scrape for messages from each device group that is given.
 
-    # Start scraping for Sigfox data
-    scraper = SigfoxScraper(USER, PASSWORD)
+    user (str): API user key
+    password (str): API password key
+    """
+    scraper = SigfoxScraper(user, password)
     device_types = scraper.request_device_types()
 
     # Parse the data to allow conversion and readability
@@ -64,6 +63,21 @@ def main():
                 seconds_since_unix_epoch = encoded_message[TIME_INDEX]
                 db.add_message(node_id, message, seconds_since_unix_epoch)
                 message_parser.insert_message_to_database(message, db, node_id)
+
+def main():
+    """
+    Entry point for the scraper. 
+    """
+    
+    # Config the logging output file
+    logging.basicConfig(filename=LOGGING_FILE, level=logging.DEBUG)
+
+    login_details = {FIRST_USER: FIRST_PASSWORD,
+    SECOND_USER: SECOND_PASSWORD}
+
+    # Start scraping for Sigfox data
+    for user, password in login_details.items():
+        scrape_messages(user, password)
 
 if __name__ == '__main__':
     main()
