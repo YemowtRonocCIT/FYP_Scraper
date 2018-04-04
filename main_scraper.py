@@ -61,8 +61,9 @@ def scrape_messages(user, password):
             for encoded_message in encoded_messages:
                 message = sigfox_parser.convert_message_from_hex(encoded_message[MESSAGE_INDEX])
                 seconds_since_unix_epoch = encoded_message[TIME_INDEX]
+                logging.debug("Time: %s" % (seconds_since_unix_epoch))
                 db.add_message(node_id, message, seconds_since_unix_epoch)
-                message_parser.insert_message_to_database(message, db, node_id)
+                message_parser.insert_message_to_latest_message(message, db, node_id)
 
 def main():
     """

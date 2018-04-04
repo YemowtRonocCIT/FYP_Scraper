@@ -175,7 +175,7 @@ class MessageParser(object):
         return vibration_value
 
 
-    def insert_message_to_database(self, message, db, node_id):
+    def insert_message_to_latest_message(self, message, db, node_id):
         """
         Inserts relevant data for a message into the database, with given
         connection to the node_id. 
