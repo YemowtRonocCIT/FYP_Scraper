@@ -204,7 +204,7 @@ class MessageParser(object):
                                             temperature_char, temperature_sensed)  
 
                 vibration_sensed = self.check_vibration_sensed(vibration_char)
-                vibration_value = self.calculate_temperature_value(
+                vibration_value = self.calculate_vibration_value(
                                             vibration_char, vibration_sensed)
                 
                 db.add_latest_message(node_id, button_pressed, temperature_sensed, 
