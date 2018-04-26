@@ -56,10 +56,9 @@ class PostgresInterface(object):
             # Should run in case of repeated UNIQUE table values
             self._conn.rollback()
             logging.exception('%s execute() sql=%s , data=%s' % (CLASS_NAME, sql, data))
-            raise
+            
         except:
             self._conn.rollback()
             logging.exception('%s execute() sql=%s , data=%s' % (CLASS_NAME, sql, data))
-            raise
         
         return False
