@@ -77,8 +77,11 @@ def main():
     SECOND_USER: SECOND_PASSWORD}
 
     # Start scraping for Sigfox data
-    for user, password in login_details.items():
-        scrape_messages(user, password)
+    for i in range(10000):
+        logging.debug("Iteration %d: Begin" % (i,))
+
+        for user, password in login_details.items():
+            scrape_messages(user, password)
 
 if __name__ == '__main__':
     main()
