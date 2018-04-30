@@ -69,7 +69,8 @@ def scrape_messages(user, password):
                 if latest_message == True:
                     message_parser.insert_message_to_latest_message(message, db, 
                                                 node_id, seconds_since_unix_epoch)
-                    db.update_buoy_checked_by_node_id(seconds_since_unix_epoch, node_id)
+                    is_there = message_parser.retrieve_button_pressed(message[0])
+                    db.update_buoy_checked_by_node_id(seconds_since_unix_epoch, node_id, is_there)
                     latest_message = False
 
 def main():

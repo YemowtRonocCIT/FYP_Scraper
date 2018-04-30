@@ -105,7 +105,7 @@ class PostgresInteraction(PostgresInterface):
             return False
 
     def add_latest_message(self, node_id, button_pressed, temperature_sensed, 
-                                vibration_sensed, temperature, vibration):
+                                vibration_sensed, temperature, vibration, time_sent):
         """
         Adds message details to database. The details of each sensor are 
         decoded before being inserted into the database.
@@ -118,18 +118,35 @@ class PostgresInteraction(PostgresInterface):
         sql = """INSERT INTO last_message(node_id, button_press, 
             temp_sensed, vib_sensed, temperature, vibration, 
             time_entered) 
-        VALUES (%s, %s, %s, %s, %s, %s, current_timestamp)
+        VALUES (%s, %s, %s, %s, %s, %s, to_timestamp(%s))
         ON CONFLICT (node_id) DO UPDATE
         SET button_press = %s,
             temp_sensed = %s,
             vib_sensed = %s,
             temperature = %s,
             vibration = %s,
-            time_entered = current_timestamp;"""
+            time_entered = to_timestamp(%s);"""
         data = (node_id, button_pressed, temperature_sensed, vibration_sensed,
-                        temperature, vibration, button_pressed, temperature_sensed,
-                        vibration_sensed, temperature, vibration)
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+                        temperature, vibration, time_sent, button_pressed, temperature_sensed,
+                        vibration_sensed, temperature, vibration, time_sent)
+        
+        return self.execute(sql, data)
+
+    def update_buoy_checked_by_node_id(self, time_checked, node_id, is_there):
+        """
+        If a node is connected to a buoy, the buoys latest status will
+        be updated, along with a timestamp to show when it was last checked.
+
+        time_checked (int): Seconds since unix epoch. It is the time that the 
+        node sent the message to be checked
+        node_id (int): ID of node which sent the message.
+        """
+        sql = """UPDATE buoy
+        SET time_checked = to_timestamp(%s),
+        at_location = %s
+        FROM node_buoy
+        WHERE buoy.buoy_id = node_buoy.buoy_id
+        AND node_buoy.node_id = %s"""
+        data = (time_checked, is_there, node_id)
+
+        return self.execute(sql, data)

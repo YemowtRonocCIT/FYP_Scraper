@@ -175,7 +175,7 @@ class MessageParser(object):
         return vibration_value
 
 
-    def insert_message_to_latest_message(self, message, db, node_id):
+    def insert_message_to_latest_message(self, message, db, node_id, seconds_since_unix_epoch):
         """
         Inserts relevant data for a message into the database, with given
         connection to the node_id. 
@@ -208,7 +208,7 @@ class MessageParser(object):
                                             vibration_char, vibration_sensed)
                 
                 db.add_latest_message(node_id, button_pressed, temperature_sensed, 
-                    vibration_sensed, temperature_number, vibration_value)
+                    vibration_sensed, temperature_number, vibration_value, seconds_since_unix_epoch)
 
         else:
             logging.debug("Invalid message: %s" % (message))
